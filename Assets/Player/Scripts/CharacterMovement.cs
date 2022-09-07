@@ -10,10 +10,12 @@ public class CharacterMovement : MonoBehaviour
     public float gravity = 20.0f;
     public float lookSpeed = 2.0f;
     public float lookXLimit = 45.0f;
+    public Animator animator;
 
-    CharacterController characterController;
-    Vector3 moveDirection = Vector3.zero;
-    float rotationX = 0;
+    private CharacterController characterController;
+    private Vector3 moveDirection = Vector3.zero;
+
+    static float OCEAN_POSITION_Y = 3.8f;
 
 
 
@@ -32,6 +34,10 @@ public class CharacterMovement : MonoBehaviour
             bool isRunning = Input.GetKey(KeyCode.LeftShift);
             float movementDirectionY = moveDirection.y;
             moveDirection = (forward * walkingSpeed * Input.GetAxis("Vertical")) + (right * walkingSpeed * Input.GetAxis("Horizontal"));
+            
+            // Set anim flag before apply gravity
+            animator.SetBool("IsMoving", moveDirection != Vector3.zero ? true : false);
+            animator.SetBool("IsSwimming",  transform.position.y < OCEAN_POSITION_Y);
 
             if (Input.GetButton("Jump") && characterController.isGrounded)
             {
@@ -45,6 +51,11 @@ public class CharacterMovement : MonoBehaviour
             if (!characterController.isGrounded)
             {
                 moveDirection.y -= gravity * Time.deltaTime;
+            }
+
+            if(transform.position.y < OCEAN_POSITION_Y)
+            {
+                moveDirection.y = 0f;
             }
 
             characterController.Move(moveDirection * Time.deltaTime);

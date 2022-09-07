@@ -11,7 +11,7 @@ public class MouseLook : MonoBehaviour
 
     const float MIN_X = 0.0f;
     const float MAX_X = 360.0f;
-    const float MIN_Y = -90.0f;
+    const float MIN_Y = -50.0f;
     const float MAX_Y = 90.0f;
      
     void Awake()
