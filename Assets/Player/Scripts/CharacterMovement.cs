@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 public class CharacterMovement : MonoBehaviour
 {
@@ -14,6 +15,7 @@ public class CharacterMovement : MonoBehaviour
 
     private CharacterController characterController;
     private Vector3 moveDirection = Vector3.zero;
+    private PhotonView photonView;
 
     static float OCEAN_POSITION_Y = 3.8f;
 
@@ -23,11 +25,13 @@ public class CharacterMovement : MonoBehaviour
     void Start() 
     {
         characterController = GetComponent<CharacterController>();
+        photonView = GetComponent<PhotonView>();
     }
 
     void Update() 
     {
-
+        if(photonView.IsMine && PhotonNetwork.IsConnected == true) 
+        {
             Vector3 forward = transform.TransformDirection(Vector3.forward);
             Vector3 right = transform.TransformDirection(Vector3.right);
 
@@ -59,5 +63,6 @@ public class CharacterMovement : MonoBehaviour
             }
 
             characterController.Move(moveDirection * Time.deltaTime);
+        }
     }   
 }
